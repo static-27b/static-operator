@@ -1,5 +1,8 @@
 {
   "youtubeAPI": "YOUTUBE API KEY HERE",
   "forcedlogs": "LOGS CHANNEL NAME HERE",
-  "geniusLyricsAPI": "GENIUS LYRICS API KEY HERE"
+  "geniusLyricsAPI": "GENIUS LYRICS API KEY HERE",
+  "prefix": "PREFIX HERE",
+  "owner": "OWNER ID HERE",
+  "supportserver": "SUPPORT SERVER INVITE HERE"
 }
