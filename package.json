@@ -1,0 +1,60 @@
+{
+  "name": "crystelian-dev",
+  "version": "1.0.0",
+  "description": "Crystelian Development",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node .",
+    "start": "node ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/opus": "^0.3.2",
+    "@keyv/mongo": "^1.0.4",
+    "@keyv/sqlite": "^2.0.2",
+    "ascii": "^1.0.0",
+    "ascii-art": "^2.5.0",
+    "ascii-table": "0.0.9",
+    "babel": "^6.23.0",
+    "beautify": "0.0.8",
+    "chalk": "^4.0.0",
+    "cheerio": "^1.0.0-rc.3",
+    "common-tags": "^1.8.0",
+    "discord.js": "github:discordjs/discord.js",
+    "discord.js-commando": "github:discordjs/Commando",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "ffmpeg": "^0.0.4",
+    "ffmpeg-static": "^4.2.1",
+    "get-youtube-id": "^1.0.1",
+    "iso-639-1": "^2.1.1",
+    "keyv": "^4.0.1",
+    "leet": "^1.3.0",
+    "ms": "^2.1.2",
+    "node-fetch": "^2.6.0",
+    "node-gyp": "^6.1.0",
+    "node-opus": "^0.3.3",
+    "opusscript": "^0.0.7",
+    "parse-ms": "^2.0.0",
+    "quick.db": "7.1.1",
+    "random-puppy": "^1.1.0",
+    "sequelize": "^5.21.10",
+    "simple-youtube-api": "^5.2.1",
+    "sqlite": "3.0.0",
+    "sqlite3": "^4.2.0",
+    "urban": "^0.3.2",
+    "youtube-info": "^1.3.2",
+    "ytdl-core": "^2.1.2"
+  },
+  "engines": {
+    "node": "12"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.6"
+  }
+}
