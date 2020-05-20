@@ -1,1 +1,3 @@
-# Mochi Admin
+# Static Operator ✨
+====================
+Welcome to Static Operator!
