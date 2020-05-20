@@ -9,6 +9,7 @@ const { stripIndents } = require("common-tags");
 const { getMember, formatDate } = require("./functions.js");
 const { MessageEmbed, Structures, Collection } = require("discord.js");
 const chalk = require("chalk");
+const config = require("./config.json");
 
 Structures.extend("Guild", Guild => {
   class MusicGuild extends Guild {
@@ -32,12 +33,9 @@ Structures.extend("Guild", Guild => {
 });
 
 const client = new CommandoClient({
-  commandPrefix: "?",
-  owner: "630817206145646602",
-  invite: "https://invite.gg/apolloisland",
-  disableMentions: "roles",
-  unknownCommandResponse: false,
-  errembed: new MessageEmbed()
+  commandPrefix: config.prefix,
+  owner: config.owners,
+  invite: config.supportserver,
 });
 
 client.registry
