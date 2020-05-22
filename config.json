@@ -4,5 +4,6 @@
   "geniusLyricsAPI": "GENIUS LYRICS API KEY HERE",
   "prefix": "PREFIX HERE",
   "owner": "OWNER ID HERE",
-  "supportserver": "SUPPORT SERVER INVITE HERE"
+  "supportserver": "SUPPORT SERVER INVITE HERE",
+  "token": "TOKEN HERE"
 }
