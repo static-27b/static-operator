@@ -7,6 +7,23 @@ const errembed = new MessageEmbed()
   )
   .setColor("#ff0000");
 const config = require('../../config.json');
+const Keyv = require('keyv');
+const modlogchannel = new Keyv(
+	"sqlite://settings.sqlite",
+	{ namespace: "modlog" }
+  );
+  const logging = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "logging" }
+	);
+  const reporting = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "reporting" }
+	);
+  const blacklist = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "blacklisting" }
+	);
 
 module.exports = class MuteCommand extends Command {
   constructor(client) {
@@ -39,14 +56,12 @@ module.exports = class MuteCommand extends Command {
     });
   }
   async run(message, { member, chanorserv, reason }) {
+    const logs = await logging.get(message.guild.id);
+    const modlog = await modlogchannel.get(message.guild.id);
     if (chanorserv === "channel") {
       const logsChannel = this.client.channels.cache.find(
-        ch => ch.name === `${config.forcedlogs}`
+        ch => ch.name === `${modlog}`
       );
-      if (!logsChannel)
-        message.guild.channels
-          .create(`${config.forcedlogs}`, { type: "text" })
-          .catch(console.error);
       message.channel.updateOverwrite(member.id, { SEND_MESSAGES: false });
       const cmuteembedo = new MessageEmbed()
         .setTitle(`${process.env.OS_NAME} | Mute`)
@@ -71,17 +86,15 @@ module.exports = class MuteCommand extends Command {
         )
         .setColor(`#${process.env.EMB_COLOR}`);
       message.embed(cmutesendembed);
+      if (logs === "on") {
       logsChannel.send(cmuteembedo);
+      }
     }
     if (chanorserv === "server") {
       const Role = message.guild.roles.cache.find(r => r.name === "Muted");
       const logsChannel = this.client.channels.cache.find(
-        ch => ch.name === "mochi-logs"
+        ch => ch.name === `${modlog}`
       );
-      if (!logsChannel)
-        message.guild.channels
-          .create("mochi-logs", { type: "text" })
-          .catch(console.error);
       member.roles.add(r => r.name === "Muted").catch(console.error)
       const smuteembedo = new MessageEmbed()
         .setTitle(`${process.env.OS_NAME} | Mute`)
@@ -106,7 +119,9 @@ module.exports = class MuteCommand extends Command {
         )
         .setColor(`#${process.env.EMB_COLOR}`);
       message.embed(smutesendembed);
+      if (logs === "on") {
       logsChannel.send(smuteembedo);
+      }
     }
   }
 };

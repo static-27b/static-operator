@@ -4,6 +4,8 @@ const errembed = new MessageEmbed()
 .setTitle(`StaticOS | ERR!`)
 .setDescription("An error has been located!\nThis could have happened due to `missing argument, you are missing permissions, or I am lacking permissions.`\nIf this error persists and you have all then necessary arguments, permissions, etc.\nPlease contact joeywoah_#5364.")
 .setColor('#ff0000');
+
+
 module.exports = class SayInCommand extends Command {
   constructor(client) {
     super(client, {

@@ -7,6 +7,23 @@ const errembed = new MessageEmbed()
   )
   .setColor("#ff0000");
 const config = require('../../config.json');
+const Keyv = require('keyv');
+const modlogchannel = new Keyv(
+	"sqlite://settings.sqlite",
+	{ namespace: "modlog" }
+  );
+  const logging = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "logging" }
+	);
+  const reporting = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "reporting" }
+	);
+  const blacklist = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "blacklisting" }
+	);
 
 module.exports = class KickCommand extends Command {
   constructor(client) {
@@ -21,6 +38,8 @@ module.exports = class KickCommand extends Command {
     });
   }
   async run(message) {
+    const logs = await logging.get(message.guild.id);
+    const modlog = await modlogchannel.get(message.guild.id);
     const errembed = new MessageEmbed()
       .setTitle(`${process.env.OS_NAME} | ERROR!`)
       .setColor(`#${process.env.EMB_COLOR}`)
@@ -55,12 +74,8 @@ module.exports = class KickCommand extends Command {
       message.mentions.members.first() || this.client.users.cache.get(args[0]);
     if (!member) return message.embed(errembed);
     const logsChannel = this.client.channels.cache.find(
-      ch => ch.name === `${config.forcedlogs}`
+      ch => ch.name === `${modlog}`
     );
-    if (!logsChannel)
-      message.guild.channels
-        .create(`${config.forcedlogs}`, { type: "text" })
-        .catch(console.error);
     await member
       .kick({ reason: `${Reason}` })
       .catch(error =>
@@ -77,6 +92,9 @@ module.exports = class KickCommand extends Command {
       .addField("**> Moderator | Administrator:**", `${message.author}`)
       .addField("**> Member Kicked:**", `${member}`)
       .addField("**> Reason:**", `${Reason}`);
+      if (logs === "on"){ 
+        logsChannel.send(kicklog)
+      }
     const kicked = new MessageEmbed()
       .setFooter(this.client.user.username, this.client.user.displayAvatarURL())
       .setTitle(`${process.env.OS_NAME} | Kick`)

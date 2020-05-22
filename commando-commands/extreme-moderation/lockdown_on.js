@@ -5,6 +5,23 @@ const errembed = new MessageEmbed()
 .setColor('#ff0000');
 const { Command } = require('discord.js-commando')
 const config = require('../../config.json');
+const Keyv = require("keyv");
+const modlogchannel = new Keyv(
+  "sqlite://settings.sqlite",
+  { namespace: "modlog" }
+);
+const logging = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "logging" }
+  );
+const reporting = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "reporting" }
+  );
+const blacklist = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "blacklisting" }
+  );
 
 module.exports = class LockdownCommand extends Command {
   constructor(client) {
@@ -27,8 +44,9 @@ module.exports = class LockdownCommand extends Command {
   }
   async run(message, { channel }) {
     // const channel = <client>.channels.cache.get('<id>');
-    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${config.forcedlogs}`);
-    if (!logsChannel) message.guild.channels.create(`${config.forcedlogs}`, { type: 'text' }).catch(console.error);
+    const logs = await logging.get(message.guild.id);
+	const modlog = await modlogchannel.get(message.guild.id);
+    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${modlog}`);
     channel.updateOverwrite(channel.guild.roles.everyone, { SEND_MESSAGES: false });
 const embed = new MessageEmbed()
     .setColor(`#${process.env.EMB_COLOR}`)
@@ -36,6 +54,8 @@ const embed = new MessageEmbed()
     .setTitle(`${process.env.OS_NAME} | Lockdown`)
     .setDescription(`${channel} has been locked.`);
 message.embed(embed);
+if (logs === "on") {
 logsChannel.send(embed);
+}
     }
 }

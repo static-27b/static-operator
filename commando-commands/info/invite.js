@@ -25,11 +25,11 @@ module.exports = class InviteCommand extends Command {
     .setAuthor(`${this.client.user.username} | ${this.client.user.id}`, this.client.user.displayAvatarURL())
     .setDescription('You called sir? You wanted an Invite? Sure!')
     .setThumbnail(this.client.user.displayAvatarURL())
-    .addField('Click on the title of this embed!', `Or click [here!](https://discord.com/oauth2/authorize?client_id=708902278836518973&permissions=8&scope=bot)`)
+    .addField('Click on the title of this embed!', `Or click [here!](https://discordapp.com/oauth2/authorize?client_id=708902278836518973&scope=bot&permissions=410086454)`)
     .setColor(`#${process.env.EMB_COLOR}`)
-    .setImage("https://photos.app.goo.gl/6D6p6VJ1CDxU2a5s6")
+    .setImage(this.client.user.displayAvatarURL())
     .setFooter(this.client.user.username, this.client.user.displayAvatarURL())
-    .setURL('https://discord.com/oauth2/authorize?client_id=708902278836518973&permissions=8&scope=bot');
+    .setURL('https://discordapp.com/oauth2/authorize?client_id=708902278836518973&scope=bot&permissions=410086454');
     message.embed(embed);
 	}
 };

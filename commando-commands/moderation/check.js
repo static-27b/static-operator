@@ -20,7 +20,7 @@ module.exports = class WarningCommand extends Command {
       name: 'searchid',
       aliases: ['details'],
       group: 'moderation',
-      memberName: 'check',
+      memberName: 'checkcase',
       description: 'Checks the details about case ID.',
       clientPermissions: ['MANAGE_MESSAGES'],
 	    userPermissions: ['MANAGE_MESSAGES'],

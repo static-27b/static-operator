@@ -8,6 +8,23 @@ const fetch = require('node-fetch')
 const { stripIndents } = require('common-tags');
 const leet = require('leet');
 const config = require('../../config.json');
+const Keyv = require("keyv");
+const modlogchannel = new Keyv(
+  "sqlite://settings.sqlite",
+  { namespace: "modlog" }
+);
+const logging = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "logging" }
+  );
+const reporting = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "reporting" }
+  );
+const blacklist = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "blacklisting" }
+  );
 
 module.exports = class GrantCommand extends Command {
 	constructor(client) {
@@ -35,8 +52,9 @@ module.exports = class GrantCommand extends Command {
 	}
 
 	async run(message, { member, Role }) {
-    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${config.forcedlogs}`);
-    if (!logsChannel) message.guild.channels.create(`${config.forcedlogs}`, { type: 'text' }).catch(console.error);
+	const logs = await logging.get(message.guild.id);
+	const modlog = await modlogchannel.get(message.guild.id);
+	const logsChannel = this.client.channels.cache.find(ch => ch.name === `${modlog}`);
         member.roles.add(Role).catch(console.error)
 	    const grantembed = new MessageEmbed()
 	    .setTitle(`${this.client.user.username} | Grant`)
@@ -53,7 +71,9 @@ module.exports = class GrantCommand extends Command {
 	    .setDescription(`**${message.author.tag}**, You have granted role ${Role} to user ${member}!`)
 	    .setColor(`#${process.env.EMB_COLOR}`)
 	    .setFooter(`Undo this command by doing ${this.client.commandPrefix}revoke <member> <role>`, this.client.user.displayAvatarURL());
-    message.embed(grantembedo);
-    logsChannel.send(grantembed)
+	message.embed(grantembedo);
+	if (logs === "on") {
+	logsChannel.send(grantembed)
+	}
 	}
 };

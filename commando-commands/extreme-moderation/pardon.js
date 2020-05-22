@@ -8,6 +8,23 @@ const fetch = require('node-fetch')
 const { stripIndents } = require('common-tags');
 const leet = require('leet');
 const config = require('../../config.json');
+const Keyv = require('keyv');
+const modlogchannel = new Keyv(
+  "sqlite://settings.sqlite",
+  { namespace: "modlog" }
+);
+const logging = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "logging" }
+  );
+const reporting = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "reporting" }
+  );
+const blacklist = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "blacklisting" }
+  );
 
 module.exports = class PardonCommand extends Command {
 	constructor(client) {
@@ -35,8 +52,9 @@ module.exports = class PardonCommand extends Command {
 	}
 
 	async run(message, { member, Reason }) {
-    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${config.forcedlogs}`);
-    if (!logsChannel) message.guild.channels.create(`${config.forcedlogs}`, { type: 'text' }).catch(console.error);
+    const logs = await logging.get(message.guild.id);
+	const modlog = await modlogchannel.get(message.guild.id);
+    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${modlog}`);
     await message.guild.members.unban(`${member}`)
             .catch (error => message.say(`Sorry ${message.author} I couldn't pardon them because of : ${error}`))
         const pardonlog = new MessageEmbed()
@@ -58,6 +76,8 @@ module.exports = class PardonCommand extends Command {
     .addField("**> Moderator | Administrator:**", `${message.author.id}`)
     .addField("**> Reason for pardon:**", `${Reason}`);
           message.embed(unbanned)
+          if (logs === "on") {
     logsChannel.send(pardonlog)
+          }
   }
 };

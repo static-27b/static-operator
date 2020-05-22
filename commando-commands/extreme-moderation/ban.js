@@ -8,6 +8,23 @@ const fetch = require('node-fetch')
 const { stripIndents } = require('common-tags');
 const leet = require('leet');
 const config = require('../../config.json');
+const Keyv = require("keyv");
+const modlogchannel = new Keyv(
+  "sqlite://settings.sqlite",
+  { namespace: "modlog" }
+);
+const logging = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "logging" }
+  );
+const reporting = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "reporting" }
+  );
+const blacklist = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "blacklisting" }
+  );
 
 
 module.exports = class BanCommand extends Command {
@@ -27,8 +44,9 @@ module.exports = class BanCommand extends Command {
     const args = message.content.slice(this.client.commandPrefix.length).trim().split(/ +/g);
     const Reason = args.slice(2).join(" ");
     const member = message.mentions.members.first() || this.client.users.cache.get(args[0])
-    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${config.forcedlogs}`);
-    if (!logsChannel) message.guild.channels.create(`${config.forcedlogs}`, { type: 'text' }).catch(console.error);
+    const logs = await logging.get(message.guild.id);
+    const modlog = await modlogchannel.get(message.guild.id);
+    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${modlog}`);
     await message.guild.members.ban(`${member}`, {reason: `${Reason}`})
             .catch(error => message.say(`Sorry ${message.author} I couldn't ban because of : ${error}`))
         const banlog = new MessageEmbed()
@@ -50,6 +68,8 @@ module.exports = class BanCommand extends Command {
     .addField("**> Moderator | Administrator:**", `${message.author.id}`)
     .addField("**> Reason for banishment:**", `${Reason}`);
           message.embed(banned)
+    if (logs === "on") {
     logsChannel.send(banlog)
+    }
   }
 };

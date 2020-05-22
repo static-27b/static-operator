@@ -19,6 +19,23 @@ const errembed = new MessageEmbed()
     "An error has been located!\nThis could have happened due to `missing argument, you are missing permissions, or I am lacking permissions.`\nIf this error persists and you have all then necessary arguments, permissions, etc.\nPlease contact joeywoah_#5364."
   )
   .setColor("RED");
+  const modlogchannel = new Keyv(
+    "sqlite://settings.sqlite",
+    { namespace: "modlog" }
+    );
+    const logging = new Keyv(
+      "sqlite://settings.sqlite",
+      { namespace: "logging" }
+    );
+    const reporting = new Keyv(
+      "sqlite://settings.sqlite",
+      { namespace: "reporting" }
+    );
+    const blacklist = new Keyv(
+      "sqlite://settings.sqlite",
+      { namespace: "blacklisting" }
+    );
+
 module.exports = class WarningCommand extends Command {
   constructor(client) {
     super(client, {
@@ -45,7 +62,10 @@ module.exports = class WarningCommand extends Command {
     });
   }
   async run(message, { member, reason }) {
+    const logs = await logging.get(message.guild.id);
+    const modlog = await modlogchannel.get(message.guild.id);
     if (message.author.id === member.id) return message.embed(this.client.errembed)//message.say('`WARNING: The ID you are trying to warn is the same one as yours!`');
+    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${modlog}`);
     
     function getRandomInt(max) {
       return Math.floor(Math.random() * Math.floor(max));
@@ -70,5 +90,8 @@ module.exports = class WarningCommand extends Command {
         message.guild.iconURL()
       );
     message.embed(embed1)
+    if (logs === "on") {
+      logsChannel.send(embed1)
+    }
   }
 };

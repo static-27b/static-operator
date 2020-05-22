@@ -7,6 +7,23 @@ const errembed = new MessageEmbed()
   )
   .setColor("#ff0000");
 const config = require('../../config.json');
+const Keyv = require('keyv');
+const modlogchannel = new Keyv(
+	"sqlite://settings.sqlite",
+	{ namespace: "modlog" }
+  );
+  const logging = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "logging" }
+	);
+  const reporting = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "reporting" }
+	);
+  const blacklist = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "blacklisting" }
+	);
 
 module.exports = class UnmuteCommand extends Command {
   constructor(client) {
@@ -33,8 +50,9 @@ module.exports = class UnmuteCommand extends Command {
     });
   }
   async run(message, { member, reason }) {
-    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${config.forcedlogs}`);
-    if (!logsChannel) message.guild.channels.create(`${config.forcedlogs}`, { type: 'text' }).catch(console.error);
+    const logs = await logging.get(message.guild.id);
+    const modlog = await modlogchannel.get(message.guild.id);
+    const logsChannel = this.client.channels.cache.find(ch => ch.name === `${modlog}`);
     message.channel.permissionOverwrites.get(member.id).delete();
     const muteembedo = new MessageEmbed()
       .setTitle(`${process.env.OS_NAME} | Unmute`)
@@ -53,6 +71,8 @@ module.exports = class UnmuteCommand extends Command {
 	    .setFooter(`Undo this by using command ${this.client.commandPrefix}mute <member>`, this.client.user.displayAvatarURL())
 	    .setColor(`#${process.env.EMB_COLOR}`);
     message.embed(mutesendembed);
+    if (logs === "on") {
     logsChannel.send(muteembedo);
+    }
   }
 };

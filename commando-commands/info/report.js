@@ -10,8 +10,25 @@ const fetch = require("node-fetch");
 const { stripIndents } = require("common-tags");
 const leet = require("leet");
 const config = require('../../config.json');
+const Keyv = require('keyv');
+const modlogchannel = new Keyv(
+	"sqlite://settings.sqlite",
+	{ namespace: "modlog" }
+  );
+  const logging = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "logging" }
+	);
+  const reporting = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "reporting" }
+	);
+  const blacklist = new Keyv(
+	  "sqlite://settings.sqlite",
+	  { namespace: "blacklisting" }
+	);
 
-module.exports = class LeetCommand extends Command {
+module.exports = class ReportCommand extends Command {
   constructor(client) {
     super(client, {
       name: "report",
@@ -35,13 +52,11 @@ module.exports = class LeetCommand extends Command {
   }
 
   async run(message, { member, reason }) {
+    const reports = await reporting.get(message.guild.id);
+    const modlog = await modlogchannel(message.guild.id);
     const logsChannel = this.client.channels.cache.find(
-      ch => ch.name === `${config.forcedlogs}`
+      ch => ch.name === `${modlog}`
     );
-    if (!logsChannel)
-      message.guild.channels
-        .create(`${config.forcedlogs}`, { type: "text" })
-        .catch(console.error);
     message.delete();
     const reported = new MessageEmbed()
       .setTitle(`${process.env.OS_NAME} | Report`)
@@ -54,7 +69,9 @@ module.exports = class LeetCommand extends Command {
         "Take action with kick, ban, mute or not.",
         this.client.user.displayAvatarURL()
       );
+      if (reports === "on") {
     logsChannel.send(reported);
+      }
     const thankreport = new MessageEmbed()
       .setTitle(`${process.env.OS_NAME} | Report`)
       .setFooter(this.client.user.username, this.client.user.displayAvatarURL())
