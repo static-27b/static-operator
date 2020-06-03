@@ -21,6 +21,7 @@ module.exports = class LeetCommand extends Command {
 	}
 
 	async run(message) {
+    if (!message.channel.nsfw) return message.channel.send('v1 Update: Meme command can now only be used in `NSFW CHANNELS`.');
     const subReddits = ["dankmeme", "meme", "me_irl"];
         const random = subReddits [Math.floor(Math.random() * subReddits.length)];
 

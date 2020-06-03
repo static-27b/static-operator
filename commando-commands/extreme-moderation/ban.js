@@ -37,17 +37,26 @@ module.exports = class BanCommand extends Command {
       description: 'Bans the mentioned member.',
       clientPermissions: ['BAN_MEMBERS'],
 	    userPermissions: ['BAN_MEMBERS'],
+      args: [
+        {
+          key: "member",
+          prompt: "Who would you like to ban?",
+          type: "user"
+        },
+        {
+          key: "Reason",
+          prompt: "Why do you want to mute them?",
+          type: "string"
+        }
+      ]
 		});
 	}
 
-	async run(message) {
-    const args = message.content.slice(this.client.commandPrefix.length).trim().split(/ +/g);
-    const Reason = args.slice(2).join(" ");
-    const member = message.mentions.members.first() || this.client.users.cache.get(args[0])
+	async run(message, { member, Reason }) {
     const logs = await logging.get(message.guild.id);
     const modlog = await modlogchannel.get(message.guild.id);
     const logsChannel = this.client.channels.cache.find(ch => ch.name === `${modlog}`);
-    await message.guild.members.ban(`${member}`, {reason: `${Reason}`})
+    await message.guild.members.ban(member, {reason: `${Reason}`})
             .catch(error => message.say(`Sorry ${message.author} I couldn't ban because of : ${error}`))
         const banlog = new MessageEmbed()
 		.setTitle(`${process.env.OS_NAME} | Ban`)

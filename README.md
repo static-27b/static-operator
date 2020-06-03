@@ -17,7 +17,7 @@ $ npm install
 
 ## Deployment
 
-Now finally run `node index.js` or run `node .` and your Discord bit should reply with `Now logged in as (bots username and tag)`!
+Now finally run `node index.js` or run `node .` and your Discord bit should reply with `STATIC OPERATOR I have logged in as (bot username and tag) (bot id)`!
 
 ## Built With
 

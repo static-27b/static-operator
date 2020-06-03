@@ -6,24 +6,18 @@ const errembed = new MessageEmbed()
     "An error has been located!\nThis could have happened due to `missing argument, you are missing permissions, or I am lacking permissions.`\nIf this error persists and you have all then necessary arguments, permissions, etc.\nPlease contact joeywoah_#5364."
   )
   .setColor("#ff0000");
-const config = require('../../config.json');
-const Keyv = require('keyv');
-const modlogchannel = new Keyv(
-	"sqlite://settings.sqlite",
-	{ namespace: "modlog" }
-  );
-  const logging = new Keyv(
-	  "sqlite://settings.sqlite",
-	  { namespace: "logging" }
-	);
-  const reporting = new Keyv(
-	  "sqlite://settings.sqlite",
-	  { namespace: "reporting" }
-	);
-  const blacklist = new Keyv(
-	  "sqlite://settings.sqlite",
-	  { namespace: "blacklisting" }
-	);
+const config = require("../../config.json");
+const Keyv = require("keyv");
+const modlogchannel = new Keyv("sqlite://settings.sqlite", {
+  namespace: "modlog"
+});
+const logging = new Keyv("sqlite://settings.sqlite", { namespace: "logging" });
+const reporting = new Keyv("sqlite://settings.sqlite", {
+  namespace: "reporting"
+});
+const blacklist = new Keyv("sqlite://settings.sqlite", {
+  namespace: "blacklisting"
+});
 
 module.exports = class KickCommand extends Command {
   constructor(client) {
@@ -34,7 +28,19 @@ module.exports = class KickCommand extends Command {
       memberName: "kick",
       description: "Kicks the mentioned member.",
       clientPermissions: ["KICK_MEMBERS"],
-      userPermissions: ["KICK_MEMBERS"]
+      userPermissions: ["KICK_MEMBERS"],
+      args: [
+        {
+          key: "member",
+          prompt: "Who would you like to kick?",
+          type: "user"
+        },
+        {
+          key: "reason",
+          prompt: "Why do you want to mute them?",
+          type: "string"
+        }
+      ]
     });
   }
   async run(message) {
@@ -92,9 +98,9 @@ module.exports = class KickCommand extends Command {
       .addField("**> Moderator | Administrator:**", `${message.author}`)
       .addField("**> Member Kicked:**", `${member}`)
       .addField("**> Reason:**", `${Reason}`);
-      if (logs === "on"){ 
-        logsChannel.send(kicklog)
-      }
+    if (logs === "on") {
+      logsChannel.send(kicklog);
+    }
     const kicked = new MessageEmbed()
       .setFooter(this.client.user.username, this.client.user.displayAvatarURL())
       .setTitle(`${process.env.OS_NAME} | Kick`)

@@ -10,23 +10,18 @@ const { getMember, formatDate } = require("./functions.js");
 const { MessageEmbed, Structures, Collection } = require("discord.js");
 const chalk = require("chalk");
 const config = require("./config.json");
-const Keyv = require('keyv');
-const modlogchannel = new Keyv(
-	"sqlite://settings.sqlite",
-	{ namespace: "modlog" }
-  );
-  const logging = new Keyv(
-	  "sqlite://settings.sqlite",
-	  { namespace: "logging" }
-	);
-  const reporting = new Keyv(
-	  "sqlite://settings.sqlite",
-	  { namespace: "reporting" }
-	);
-  const blacklist = new Keyv(
-	  "sqlite://settings.sqlite",
-	  { namespace: "blacklisting" }
-	);
+const Keyv = require("keyv");
+const ms = require("ms");
+const modlogchannel = new Keyv("sqlite://settings.sqlite", {
+  namespace: "modlog"
+});
+const logging = new Keyv("sqlite://settings.sqlite", { namespace: "logging" });
+const reporting = new Keyv("sqlite://settings.sqlite", {
+  namespace: "reporting"
+});
+const blacklist = new Keyv("sqlite://settings.sqlite", {
+  namespace: "blacklisting"
+});
 
 Structures.extend("Guild", Guild => {
   class MusicGuild extends Guild {
@@ -35,7 +30,7 @@ Structures.extend("Guild", Guild => {
       this.musicData = {
         queue: [],
         isPlaying: false,
-        volume: 1,
+        volume: 3,
         songDispatcher: null
       };
       this.triviaData = {
@@ -52,25 +47,27 @@ Structures.extend("Guild", Guild => {
 const client = new CommandoClient({
   commandPrefix: "ic-",
   owner: "630817206145646602",
-  invite: "https://invite.gg/apolloisland",
+  invite: "https://discord.gg/FCVhqK",
   unknownCommandResponse: false
 });
 
 client.registry
   .registerDefaultTypes()
   .registerGroups([
-    ["economy", "Your Economy Command Group"],
-    ["configurations", "The Configuration and Security Command Group"],
-    ["extreme-moderation", "The Administraton Command Group"],
-    ["role-series", "The Role Series Command Group."],
-    ["fun", "The Fun Command Group"],
-    ["tags", "The Tags Command Group"],
     ["info", "The Info Command Group"],
+    ["fun", "The Fun Command Group"],
+    ["extreme-moderation", "The Administraton Command Group"],
     ["moderation", "The Normal Moderation Command Group"],
-    ["music", "The Music Command Group"]
+    ["role-series", "The Role Series Command Group."],
+    ["music", "The Music Command Group"],
+    ["configurations", "The Configuration and Security Command Group"],
+    ["tags", "The Tags Command Group"],
+    ["economy", "Your Economy Command Group"]
   ])
   .registerDefaultGroups()
-  .registerDefaultCommands()
+  .registerDefaultCommands({
+  unknownCommand: false,
+})
   .registerCommandsIn(path.join(__dirname, "commando-commands"));
 
 client.once("ready", () => {
@@ -104,14 +101,7 @@ client.on("guildCreate", guild => {
     )
     .setFooter(client.user.username, client.user.displayAvatarURL());
 
-  guild.channels.cache
-    .sort(function(chan1, chan2) {
-      if (chan1.type !== `text`) return 1;
-      if (!chan1.permissionsFor(guild.me).has(`SEND_MESSAGES`)) return -1;
-      return chan1.position < chan2.position ? -1 : 1;
-    })
-    .first()
-    .send(embed);
+  guild.systemChannel.send(embed);
 });
 
 sqlite.open(path.join(__dirname, "settings.sqlite")).then(db => {

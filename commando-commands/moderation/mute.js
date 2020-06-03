@@ -91,7 +91,7 @@ module.exports = class MuteCommand extends Command {
       }
     }
     if (chanorserv === "server") {
-      const Role = message.guild.roles.cache.find(r => r.name === "Muted");
+      const Role = message.guild.roles.cache.find(role => role.name === "Muted");
       const logsChannel = this.client.channels.cache.find(
         ch => ch.name === `${modlog}`
       );

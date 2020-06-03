@@ -21,7 +21,7 @@ module.exports = class UrbanCommand extends Command {
   }
 
   async run(message) {
-    if (!message.channel.nsfw) return message.channel.send('v2 Update: Urban command can now onlt be used in `NSFW CHANNELS`.');
+    if (!message.channel.nsfw) return message.channel.send('v1 Update: Urban command can now only be used in `NSFW CHANNELS`.');
     const errembed = new MessageEmbed()
             .setTitle(`${process.env.OS_NAME} | ERROR!`)
             .setColor(`#${process.env.EMB_COLOR}`)
