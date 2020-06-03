@@ -1,9 +1,8 @@
 {
-  "youtubeAPI": "AIzaSyD5542J5XdJhGnkMCLAj_OvS5H0xI0OS9c",
-  "forcedlogs": "radifasf",
-  "geniusLyricsAPI": "eWjW6wiKBvayl0una_xwQMz873wJQ0OqryOhI2OOkvKfa1pn9o-3xPjwBldnEvkg",
-  "prefix": "ic-",
-  "owner": "630817206145646602",
-  "supportserver": "https://invite.gg/apolloisland",
-  "token": "NzA4OTAyMjc4ODM2NTE4OTcz.XshkIA.KN5l5fv1_rW6fNVe6aO_l77nvVM"
+  "youtubeAPI": "YOUTUBE API KEY",
+  "geniusLyricsAPI": "GENIUS LYRICS API KEY",
+  "prefix": "PREFIX",
+  "owner": "OWNER ID",
+  "supportserver": "SUPPORT SERVER INVITE HERE",
+  "token": "BOT TOKEN HERE"
 }
