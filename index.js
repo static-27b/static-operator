@@ -1,8 +1,4 @@
-const {
-  CommandoClient,
-  SQLiteProvider,
-  Commando
-} = require("discord.js-commando");
+const { CommandoClient, SQLiteProvider, Commando } = require("discord.js-commando");
 const path = require("path");
 const sqlite = require("sqlite");
 const { stripIndents } = require("common-tags");
@@ -15,7 +11,9 @@ const ms = require("ms");
 const modlogchannel = new Keyv("sqlite://settings.sqlite", {
   namespace: "modlog"
 });
-const logging = new Keyv("sqlite://settings.sqlite", { namespace: "logging" });
+const logging = new Keyv("sqlite://settings.sqlite", { 
+  namespace: "logging" 
+});
 const reporting = new Keyv("sqlite://settings.sqlite", {
   namespace: "reporting"
 });
@@ -61,13 +59,12 @@ client.registry
     ["role-series", "The Role Series Command Group."],
     ["music", "The Music Command Group"],
     ["configurations", "The Configuration and Security Command Group"],
-    ["tags", "The Tags Command Group"],
-    ["economy", "Your Economy Command Group"]
+    ["tags", "The Tags Command Group"]
   ])
   .registerDefaultGroups()
   .registerDefaultCommands({
-  unknownCommand: false,
-})
+    unknownCommand: false
+  })
   .registerCommandsIn(path.join(__dirname, "commando-commands"));
 
 client.once("ready", () => {

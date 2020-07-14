@@ -1,8 +1,10 @@
 {
-  "youtubeAPI": "YOUTUBE API KEY",
-  "geniusLyricsAPI": "GENIUS LYRICS API KEY",
-  "prefix": "PREFIX",
-  "owner": "OWNER ID",
-  "supportserver": "SUPPORT SERVER INVITE HERE",
-  "token": "BOT TOKEN HERE"
+  "youtubeAPI": "AIzaSyD5542J5XdJhGnkMCLAj_OvS5H0xI0OS9c",
+  "forcedlogs": "radifasf",
+  "geniusLyricsAPI": "eWjW6wiKBvayl0una_xwQMz873wJQ0OqryOhI2OOkvKfa1pn9o-3xPjwBldnEvkg",
+  "prefix": "ic-",
+  "owner": "630817206145646602",
+  "supportserver": "https://invite.gg/apolloisland",
+  "token": "NzA4OTAyMjc4ODM2NTE4OTcz.Xtf7qw.ZRfOlHC2mF3TfmjAyelAOGRR7pI",
+  "password": "timothee"
 }

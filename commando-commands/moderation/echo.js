@@ -17,7 +17,8 @@ module.exports = class EchoCommand extends Command {
 		{
 			key: 'say',
             prompt: 'What do you want the bot/client to say?',
-            type: 'string'
+            type: 'string',
+      default: "This has no message."
         },
         {
             key: 'channel',
@@ -28,7 +29,13 @@ module.exports = class EchoCommand extends Command {
     });
   }
   async run(message, { say, channel }) {
+    const embed = new MessageEmbed()
+    .setAuthor(`${message.guild.name} | ${message.guild.id}`, message.guild.iconURL())
+    .setColor(`#${process.env.EMB_COLOR}`)
+    .setTitle(`Message From ${message.author.username} From Channel ${message.channel}.`)
+    .setFooter(this.client.user.username, this.client.user.displayAvatarURL())
+    .setDescription(`${say}`);
     message.delete()
-    channel.send(say);
+    channel.embed(embed);
 }
 }
